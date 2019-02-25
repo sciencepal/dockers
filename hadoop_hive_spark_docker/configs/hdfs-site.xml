@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+		<name>dfs.permissions</name>
+		<value>false</value>
+	</property>
+    <property>
+            <name>dfs.namenode.name.dir</name>
+            <value>/home/hadoop/data/nameNode</value>
+    </property>
+    <property>
+            <name>dfs.datanode.data.dir</name>
+            <value>/home/hadoop/data/dataNode</value>
+    </property>
+    <property>
+		<name>dfs.datanode.max.transfer.threads</name>
+		<value>8192</value>
+	</property>
+    <property>
+          <name>dfs.namenode.checkpoint.dir</name>
+          <value>/home/hadoop/data/nameNodeSecondary</value>
+    </property>
+	<property>
+		<name>dfs.namenode.http-address</name>
+		<value>nodemaster:50070</value>
+	</property>
+    <property>
+		<name>dfs.namenode.secondary.http-address</name>
+		<value>nodemaster:50090</value>
+	</property>
+    <property>
+            <name>dfs.replication</name>
+            <value>1</value>
+    </property>
+</configuration>

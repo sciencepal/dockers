@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>yarn.acl.enable</name>
+        <value>0</value>
+    </property>
+	<property>
+		<name>yarn.application.classpath</name>
+		<value>/home/hadoop/hadoop/etc/hadoop, /home/hadoop/hadoop/share/hadoop/common/*, /home/hadoop/hadoop/share/hadoop/common/lib/*, /home/hadoop/hadoop/share/hadoop/hdfs/*, /home/hadoop/hadoop/share/hadoop/hdfs/lib/*, /home/hadoop/hadoop/share/hadoop/mapreduce/*, /home/hadoop/hadoop/share/hadoop/mapreduce/lib/*, /home/hadoop/hadoop/share/hadoop/yarn/*, /home/hadoop/hadoop/share/hadoop/yarn/lib/*</value>
+	</property>
+    <property>
+            <name>yarn.resourcemanager.hostname</name>
+            <value>nodemaster</value>
+    </property>
+    <property>
+            <name>yarn.nodemanager.aux-services</name>
+            <value>mapreduce_shuffle</value>
+    </property>
+	<property>
+		<name>yarn.log-aggregation-enable</name>
+		<value>true</value>
+	</property>
+	<property>
+		<name>yarn.log-aggregation.retain-seconds</name>
+		<value>86400</value>
+	</property>
+    <property>
+            <name>yarn.nodemanager.resource.memory-mb</name>
+            <value>1024</value>
+    </property>
+    <property>
+            <name>yarn.scheduler.maximum-allocation-mb</name>
+            <value>1024</value>
+    </property>
+    <property>
+            <name>yarn.scheduler.minimum-allocation-mb</name>
+            <value>128</value>
+    </property>
+    <property>
+		<name>yarn.nodemanager.resource.cpu-vcores</name>
+		<value>2</value>
+	</property>
+    <property>
+            <name>yarn.nodemanager.vmem-check-enabled</name>
+            <value>false</value>
+    </property>
+    <property>
+            <name>yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage</name>
+            <value>99</value>
+    </property>
+    <property>
+            <name>yarn.nodemanager.pmem-check-enabled</name>
+            <value>false</value>
+    </property>
+</configuration>

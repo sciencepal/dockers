@@ -1,0 +1,5 @@
+
+    Hadoop info @ nodemaster: http://172.18.1.1:8088/cluster
+    Spark info @ nodemaster : http://172.18.1.1:8080/
+    DFS Health @ nodemaster : http://172.18.1.1:9870/dfshealth.html
+
