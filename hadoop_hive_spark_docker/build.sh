@@ -23,8 +23,8 @@ docker build -f ./hadoopbase/Dockerfile . -t hadoopbase
 # Hadoop build
 docker build -f ./hadoop/Dockerfile . -t hadoop
 
-# Hive
-#docker build /hive -t hive
-
 # Spark
 docker build -f ./spark/Dockerfile . -t spark
+
+# Hive
+docker build -f ./hive/Dockerfile . -t hive

@@ -15,18 +15,14 @@ RUN rm -rf /home/hadoop/apache-hive-3.1.1*
 ENV HIVE_HOME /home/hadoop/hive
 ENV PATH $HIVE_HOME/bin:$PATH
 
-# set hive-config.sh
+# set hive-config.sh and hive-site.xml
 RUN echo "export HADOOP_HOME=/home/hadoop/hadoop" >> /home/hadoop/hive/bin/hive-config.sh
 RUN cp /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/
-ADD hive-site.xml $HIVE_HOME/conf
+ADD configs/hive-site.xml $HIVE_HOME/conf
+RUN chown hadoop -R /home/hadoop/hive
 
 RUN service mysql start
+RUN sleep 5
 RUN mysqladmin -uroot -prootpass proc; exit 0
-RUN echo "CREATE USER 'hive'@'localhost' IDENTIFIED BY 'hive';"
-RUN echo "GRANT ALL PRIVILEGES ON *.* TO 'hive'@'localhost';"
-RUN echo "CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';"
-RUN echo "GRANT ALL PRIVILEGES ON *.* TO 'hive'@'%';"
-RUN echo "CREATE USER 'hive'@'[HIVE_METASTORE_FQDN]' IDENTIFIED BY 'hive';"
-RUN echo "GRANT ALL PRIVILEGES ON *.* TO 'hive'@'[HIVE_METASTORE_FQDN]';"
-RUN echo "FLUSH PRIVILEGES;"
+
 ENTRYPOINT service mysql start && /bin/bash
