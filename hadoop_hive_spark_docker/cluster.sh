@@ -21,15 +21,14 @@ function startServices {
   echo ">> Starting Spark History Server ..."
   docker exec -u hadoop nodemaster /home/hadoop/spark/sbin/start-history-server.sh
   sleep 5
-  echo ">> Creating HDFS warehouse ..."
-  docker exec -u hadoop -d nodemaster hdfs dfs -mkdir -p /user/hive/warehouse
-  docker exec -u hadoop -d nodemaster hdfs dfs -chmod g+w /tmp
-  docker exec -u hadoop -d nodemaster hdfs dfs -chmod g+w /user/hive/warehouse
-  sleep 5
-  echo ">> Initializing Schema ..."
-  docker exec -u hadoop -d nodemaster schematool --dbType mysql --initSchema
+  echo ">> Preparing hdfs for hive ..."
+  docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /tmp
+  docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /user/hive/warehouse
+  docker exec -u hadoop -it nodemaster hdfs dfs -chmod g+w /tmp
+  docker exec -u hadoop -it nodemaster hdfs dfs -chmod g+w /user/hive/warehouse
   sleep 5
   echo ">> Starting Hive Metastore ..."
+ # docker exec -u hadoop -d nodemaster schematool -dbType postgres -initSchema
   docker exec -u hadoop -d nodemaster hive --service metastore
   echo "Hadoop info @ nodemaster: http://172.18.1.1:8088/cluster"
   echo "DFS Health @ nodemaster : http://172.18.1.1:50070/dfshealth"
@@ -44,7 +43,7 @@ function stopServices {
   docker exec -u hadoop -d node2 /home/hadoop/spark/sbin/stop-slave.sh
   docker exec -u hadoop -d node3 /home/hadoop/spark/sbin/stop-slave.sh
   echo ">> Stopping containers ..."
-  docker stop nodemaster node2 node3
+  docker stop nodemaster node2 node3 psqlhms
 }
 
 if [[ $1 = "start" ]]; then
@@ -62,15 +61,20 @@ if [[ $1 = "deploy" ]]; then
   docker network rm hadoopnet
   docker network create --subnet=172.18.0.0/16 hadoopnet # create custom network
 
+  # Starting Postresql Hive metastore
+  echo ">> Starting postgresql hive metastore ..."
+  docker run -d --net hadoopnet --ip 172.18.1.4 --hostname psqlhms --name psqlhms -it postgresql-hms
+  sleep 5
+  
   # 3 nodes
   echo ">> Starting nodes master and worker nodes ..."
   docker run -d --net hadoopnet --ip 172.18.1.1 --hostname nodemaster --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --name nodemaster -it hive
-  docker run -d --net hadoopnet --ip 172.18.1.2 --hostname node2 --add-host nodemaster:172.18.1.1 --add-host node3:172.18.1.3 --name node2 -it hive
-  docker run -d --net hadoopnet --ip 172.18.1.3 --hostname node3 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --name node3 -it hive
+  docker run -d --net hadoopnet --ip 172.18.1.2 --hostname node2 --add-host nodemaster:172.18.1.1 --add-host node3:172.18.1.3 --name node2 -it spark
+  docker run -d --net hadoopnet --ip 172.18.1.3 --hostname node3 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --name node3 -it spark
 
   # Format nodemaster
   echo ">> Formatting hdfs ..."
-  docker exec -u hadoop -it nodemaster /home/hadoop/hadoop/bin/hdfs namenode -format
+  docker exec -u hadoop -it nodemaster hdfs namenode -format
   startServices
   exit
 fi
@@ -78,7 +82,7 @@ fi
 
 if [[ $1 = "undeploy" ]]; then
   stopServices
-  docker rm nodemaster node2 node3
+  docker rm nodemaster node2 node3 psqlhms
   docker network rm hadoopnet
   exit
 fi
@@ -86,7 +90,7 @@ fi
 
 if [[ $1 = "uninstall" ]]; then
   stopServices
-  docker rmi hadoop hadoopbase spark hadoop_spark_hive -f
+  docker rmi hadoop hadoopbase spark hadoop_spark_hive postgresql-hms -f
   docker system prune -f
   exit
 fi

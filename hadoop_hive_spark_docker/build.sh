@@ -4,8 +4,8 @@ if [ ! -d "sources" ]; then
   mkdir -p sources
   echo "Downloading hadoop source ..."
   wget https://archive.apache.org/dist/hadoop/core/hadoop-3.2.0/hadoop-3.2.0.tar.gz -P ./sources
-  echo "Downloading hive source ..."  
-  wget https://archive.apache.org/dist/hive/hive-3.1.1/apache-hive-3.1.1-bin.tar.gz -P ./sources
+  echo "Downloading hive source ..."
+  wget http://mirrors.estointernet.in/apache/hive/stable-2/apache-hive-2.3.4-bin.tar.gz -P ./sources
   echo "Downloading scala source ..."
   wget https://downloads.lightbend.com/scala/2.12.8/scala-2.12.8.tgz -P ./sources
   echo "Downloading spark source ..."  
@@ -25,6 +25,9 @@ docker build -f ./hadoop/Dockerfile . -t hadoop
 
 # Spark
 docker build -f ./spark/Dockerfile . -t spark
+
+# PostgreSQL Hive Metastore Server
+docker build -f ./postgresql-hms/Dockerfile . -t postgresql-hms
 
 # Hive
 docker build -f ./hive/Dockerfile . -t hive

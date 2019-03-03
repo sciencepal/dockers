@@ -1,22 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://mysql:3306/hive?createDatabaseIfNotExist=true&amp;useSSL=false</value>
+    <value>jdbc:postgresql://psqlhms:5432/metastore</value>
     <description>JDBC connect string for a JDBC metastore</description>
   </property>
   <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>com.mysql.jdbc.Driver</value>
+    <value>org.postgresql.Driver</value>
     <description>Driver class name for a JDBC metastore</description>
   </property>
   <property>
     <name>javax.jdo.option.ConnectionUserName</name>
-    <value>root</value>
+    <value>hive</value>
     <description>username to use against metastore database</description>
   </property>
   <property>
     <name>javax.jdo.option.ConnectionPassword</name>
-    <value>rootpass</value>
+    <value>hive</value>
     <description>password to use against metastore database</description>
   </property>
   <property>
@@ -26,5 +28,15 @@
   <property>
     <name>hive.metastore.schema.verification</name>
     <value>false</value>
+  </property>
+  <property>
+     <name>datanucleus.autoCreateSchema</name>
+     <value>false</value>
+     <description>Creates necessary schema on a startup if one doesn't exist</description>
+  </property>
+  <property>
+     <name>hive.metastore.warehouse.dir</name>
+     <value>/user/hive/metastore</value>
+     <description>Metastore Warehouse</description>
   </property>
 </configuration>
