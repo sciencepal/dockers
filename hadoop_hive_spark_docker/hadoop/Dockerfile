@@ -1,4 +1,4 @@
-FROM hadoopbase
+FROM ubuntu
 
 MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 
@@ -7,16 +7,31 @@ USER root
 # open port 22
 EXPOSE 22
 
+RUN apt-get update
+
+# Uncomment these lines to install Oracle JDK instead of OpenJDK
+# RUN apt-get install -y software-properties-common
+# RUN add-apt-repository -y ppa:webupd8team/java
+# RUN apt-get update
+# RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+# RUN apt-get install -y oracle-java8-installer
+
+
+# OpenJDK installation
+RUN apt-get install -y openjdk-8-jre
+
+# ssh for communication between nodes
+RUN apt-get install -y openssh-server
+
+# install editor of your choice
+RUN apt-get install -y vim
+
 # add hadoop user
 RUN useradd -m -s /bin/bash hadoop
 
-# copy sources
-WORKDIR /home/hadoop
-ADD sources/hadoop-3.2.0.tar.gz /home/hadoop/
-RUN mv /home/hadoop/hadoop-3.2.0 /home/hadoop/hadoop
-RUN rm -rf /home/hadoop/hadoop-3.2.0*
-
-# set hadoop auth properties (pub key and no password)
+# set pubkey authentication
+RUN echo "PubkeyAuthentication yes" >> /etc/ssh/ssh_config
+RUN service ssh start
 RUN mkdir -p /home/hadoop/.ssh
 RUN echo "PubkeyAcceptedKeyTypes +ssh-dss" >> /home/hadoop/.ssh/config
 RUN echo "PasswordAuthentication no" >> /home/hadoop/.ssh/config
@@ -26,6 +41,12 @@ ADD configs/id_rsa.pub /home/hadoop/.ssh/id_rsa.pub
 ADD configs/id_rsa /home/hadoop/.ssh/id_rsa
 RUN cat /home/hadoop/.ssh/id_rsa.pub >> /home/hadoop/.ssh/authorized_keys
 RUN chown hadoop -R /home/hadoop/.ssh
+
+# get sources
+RUN wget https://archive.apache.org/dist/hadoop/core/hadoop-3.2.0/hadoop-3.2.0.tar.gz -P /home/hadoop/
+RUN tar -xzf /home/hadoop/hadoop-3.2.0.tar.gz -C /home/hadoop/
+RUN mv /home/hadoop/hadoop-3.2.0 /home/hadoop/hadoop
+RUN rm -rf /home/hadoop/hadoop-3.2.0*
 
 # set environment variables
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
@@ -58,3 +79,5 @@ ADD configs/workers $HADOOP_HOME/etc/hadoop/workers
 # permissions
 RUN chown hadoop -R /home/hadoop/data
 RUN chown hadoop -R /home/hadoop/hadoop
+
+CMD service ssh start && bash

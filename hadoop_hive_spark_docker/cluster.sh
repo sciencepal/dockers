@@ -28,7 +28,6 @@ function startServices {
   docker exec -u hadoop -it nodemaster hdfs dfs -chmod g+w /user/hive/warehouse
   sleep 5
   echo ">> Starting Hive Metastore ..."
- # docker exec -u hadoop -d nodemaster schematool -dbType postgres -initSchema
   docker exec -u hadoop -d nodemaster hive --service metastore
   echo "Hadoop info @ nodemaster: http://172.18.1.1:8088/cluster"
   echo "DFS Health @ nodemaster : http://172.18.1.1:50070/dfshealth"
@@ -47,16 +46,6 @@ function stopServices {
 }
 
 if [[ $1 = "start" ]]; then
-  startServices
-  exit
-fi
-
-if [[ $1 = "stop" ]]; then
-  stopServices
-  exit
-fi
-
-if [[ $1 = "deploy" ]]; then
   docker rm -f `docker ps -aq` # delete old containers
   docker network rm hadoopnet
   docker network create --subnet=172.18.0.0/16 hadoopnet # create custom network
@@ -80,7 +69,7 @@ if [[ $1 = "deploy" ]]; then
 fi
 
 
-if [[ $1 = "undeploy" ]]; then
+if [[ $1 = "stop" ]]; then
   stopServices
   docker rm nodemaster node2 node3 psqlhms
   docker network rm hadoopnet
@@ -90,14 +79,12 @@ fi
 
 if [[ $1 = "uninstall" ]]; then
   stopServices
-  docker rmi hadoop hadoopbase spark hadoop_spark_hive postgresql-hms -f
+  docker rmi hadoop spark hadoop_spark_hive postgresql-hms -f
   docker system prune -f
   exit
 fi
 
-echo "Usage: cluster.sh deploy|start|stop|undeploy|uninstall"
-echo "                 deploy - start new Docker conatiners with network"
+echo "Usage: cluster.sh start|stop|uninstall"
 echo "                 start  - start existing containers"
 echo "                 stop   - stop running processes"
-echo "                 undeploy - stop running containers and remove them"
 echo "                 uninstall - remove all docker images"
