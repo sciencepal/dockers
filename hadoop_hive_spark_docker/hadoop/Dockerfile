@@ -31,7 +31,6 @@ RUN useradd -m -s /bin/bash hadoop
 
 # set pubkey authentication
 RUN echo "PubkeyAuthentication yes" >> /etc/ssh/ssh_config
-RUN service ssh start
 RUN mkdir -p /home/hadoop/.ssh
 RUN echo "PubkeyAcceptedKeyTypes +ssh-dss" >> /home/hadoop/.ssh/config
 RUN echo "PasswordAuthentication no" >> /home/hadoop/.ssh/config
@@ -70,6 +69,7 @@ RUN echo "export HDFS_SECONDARYNAMENODE_USER=hadoop" >> /home/hadoop/hadoop/etc/
 
 # create folders for nodes
 RUN mkdir -p /home/hadoop/data/nameNode /home/hadoop/data/dataNode /home/hadoop/data/nameNodeSecondary /home/hadoop/data/tmp
+RUN mkdir -p /home/hadoop/hadoop/logs
 ADD configs/core-site.xml $HADOOP_HOME/etc/hadoop/core-site.xml
 ADD configs/hdfs-site.xml $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 ADD configs/mapred-site.xml $HADOOP_HOME/etc/hadoop/mapred-site.xml

@@ -5,21 +5,21 @@ function startServices {
   docker start nodemaster node2 node3
   sleep 5
   echo ">> Starting hdfs ..."
-  docker exec -u hadoop -it nodemaster /home/hadoop/hadoop/sbin/start-dfs.sh
+  docker exec -u hadoop -it nodemaster start-dfs.sh
   sleep 5
   echo ">> Starting yarn ..."
-  docker exec -u hadoop -d nodemaster /home/hadoop/hadoop/sbin/start-yarn.sh
+  docker exec -u hadoop -d nodemaster start-yarn.sh
   sleep 5
   echo ">> Starting MR-JobHistory Server ..."
-  docker exec -u hadoop -d nodemaster /home/hadoop/hadoop/sbin/mr-jobhistory-daemon.sh start historyserver
+  docker exec -u hadoop -d nodemaster mr-jobhistory-daemon.sh start historyserver
   sleep 5
   echo ">> Starting Spark ..."
-  docker exec -u hadoop -d nodemaster /home/hadoop/spark/sbin/start-master.sh
-  docker exec -u hadoop -d node2 /home/hadoop/spark/sbin/start-slave.sh nodemaster:7077
-  docker exec -u hadoop -d node3 /home/hadoop/spark/sbin/start-slave.sh nodemaster:7077
+  docker exec -u hadoop -d nodemaster start-master.sh
+  docker exec -u hadoop -d node2 start-slave.sh nodemaster:7077
+  docker exec -u hadoop -d node3 start-slave.sh nodemaster:7077
   sleep 5
   echo ">> Starting Spark History Server ..."
-  docker exec -u hadoop nodemaster /home/hadoop/spark/sbin/start-history-server.sh
+  docker exec -u hadoop nodemaster start-history-server.sh
   sleep 5
   echo ">> Preparing hdfs for hive ..."
   docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /tmp
@@ -38,16 +38,14 @@ function startServices {
 
 function stopServices {
   echo ">> Stopping Spark Master and slaves ..."
-  docker exec -u hadoop -d nodemaster /home/hadoop/spark/sbin/stop-master.sh
-  docker exec -u hadoop -d node2 /home/hadoop/spark/sbin/stop-slave.sh
-  docker exec -u hadoop -d node3 /home/hadoop/spark/sbin/stop-slave.sh
+  docker exec -u hadoop -d nodemaster stop-master.sh
+  docker exec -u hadoop -d node2 stop-slave.sh
+  docker exec -u hadoop -d node3 stop-slave.sh
   echo ">> Stopping containers ..."
   docker stop nodemaster node2 node3 psqlhms
 }
 
 if [[ $1 = "start" ]]; then
-  docker rm -f `docker ps -aq` # delete old containers
-  docker network rm hadoopnet
   docker network create --subnet=172.18.0.0/16 hadoopnet # create custom network
 
   # Starting Postresql Hive metastore
@@ -79,7 +77,8 @@ fi
 
 if [[ $1 = "uninstall" ]]; then
   stopServices
-  docker rmi hadoop spark hadoop_spark_hive postgresql-hms -f
+  docker rmi hadoop spark hive postgresql-hms -f
+  docker network rm hadoopnet
   docker system prune -f
   exit
 fi

@@ -7,4 +7,5 @@ USER root
 RUN export LANGUAGE=en_US.UTF-8
 ADD configs/hive-schema-2.3.0.postgres.sql /hive/hive-schema-2.3.0.postgres.sql
 ADD configs/hive-txn-schema-2.3.0.postgres.sql /hive/hive-txn-schema-2.3.0.postgres.sql
-ADD configs/init-hive-db.sh /docker-entrypoint-initdb.d/init-hive-db.sh
+
+COPY configs/init-hive-db.sh /docker-entrypoint-initdb.d/init-user-db.sh

@@ -25,7 +25,7 @@ ENV SPARK_HOME /home/hadoop/spark
 ENV SPARK_LOG_DIR /home/hadoop/spark/logs
 # ENV SPARK_DIST_CLASSPATH $(hadoop classpath) does not work
 RUN export SPARK_DIST_CLASSPATH=$(hadoop classpath)
-ENV PATH $SPARK_HOME/bin:$PATH
+ENV PATH $SPARK_HOME/bin:$SPARK_HOME/sbin:$PATH
 RUN mv /home/hadoop/spark/conf/spark-env.sh.template /home/hadoop/spark/conf/spark-env.sh
 RUN echo "export SPARK_DIST_CLASSPATH=$(hadoop classpath)" >> /home/hadoop/spark/conf/spark-env.sh
 RUN echo "export SPARK_LOG_DIR=/home/hadoop/spark/logs" >> /home/hadoop/spark/conf/spark-env.sh
