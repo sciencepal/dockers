@@ -1,0 +1,69 @@
+https://hub.docker.com/r/sciencepal/coursera_postgres_py2
+
+**Unofficial Docker for Coursera Data Systems Specialization by Arizona State University**
+
+INSTALLING DOCKER :
+
+You can install docker from here : https://docs.docker.com/v17.12/install/ .
+
+Specifically for debian based distros :
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker (for automatic start of docker service on boot)
+
+Follow the post-installation steps here (creating docker group, running docker as non-root user): https://docs.docker.com/install/linux/linux-postinstall/
+
+PULLING DOCKER IMAGE :
+
+docker pull sciencepal/coursera_postgres_py2:1.1
+
+STARTING THE CONTAINER :
+
+docker network create --subnet=172.18.0.0/16 courseranet
+docker run -d --net courseranet --ip 172.18.1.1 --hostname coursera --name coursera -it sciencepal/coursera_postgres_py2:1.1
+docker exec -it coursera /bin/bash
+service postgresql start
+(Try this 2-3 times if there is error first time)
+apt install sudo
+apt install nano (vi is installed by default, install your favourite editor here)
+
+OPEN POSTGRESQL IN ONE TERMINAL
+
+su - postgres
+
+Password for postgres account is 1234
+
+psql
+
+OPEN A NEW TERMINAL FOR THE SAME CONTAINER
+
+docker exec -it coursera /bin/bash
+mkdir -p [LOCATION TO UPLOAD FILES FOR TESTING]
+
+UPLOAD FILES FROM LOCAL TO CONTAINER
+
+In Local Terminal, run
+
+docker cp [LOCATION OF YOUR LOCAL FILES] coursera:[LOCATION OF YOUR CONTAINER FILES]
+
+For example, docker cp /home/aditya/Desktop/Distributed_Database_Systems/week-2/ coursera:/tmp/week-2/
+
+This will upload files from your local to the container. Once uploaded, open with your favourite editor : vi /tmp/week-2/Assignment.py
+
+TESTING THE ASSIGNMENT
+
+python2.7 /tmp/week-2/tester.py
+
+Keep checking Postgresql terminal in the other tab for testing.
+
+DOWNLOAD TESTED FILES FROM CONTAINER TO LOCAL
+
+docker cp coursera:[LOCATION OF CONTAINER FILES] [LOCATION OF DOWNLOAD]
+
+For example, docker cp coursera:/tmp/week-2/ /home/aditya/Desktop/Distributed_Database_Systems/week-2/tested/
+
+STOPPING THE CONTAINER
+
+docker stop coursera
+docker rm coursera
+docker network rm courseranet
