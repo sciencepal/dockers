@@ -4,6 +4,10 @@ MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 
 USER root
 
+# installing python for pyspark
+# change python version as per your requirement
+RUN apt install -y python
+
 # get sources
 RUN mkdir /usr/share/scala
 RUN wget https://downloads.lightbend.com/scala/2.12.8/scala-2.12.8.tgz -P /tmp/
