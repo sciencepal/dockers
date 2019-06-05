@@ -6,7 +6,7 @@ USER root
 
 # get sources
 RUN apt-get install -y libpostgresql-jdbc-java
-RUN wget http://mirrors.estointernet.in/apache/hive/stable-2/apache-hive-2.3.4-bin.tar.gz -P /home/hadoop/
+RUN wget https://archive.apache.org/dist/hive/hive-2.3.4/apache-hive-2.3.4-bin.tar.gz -P /home/hadoop/
 RUN tar -xzf /home/hadoop/apache-hive-2.3.4-bin.tar.gz -C /home/hadoop/
 RUN mv /home/hadoop/apache-hive-2.3.4-bin /home/hadoop/hive
 RUN rm -rf /home/hadoop/apache-hive-2.3.4*
