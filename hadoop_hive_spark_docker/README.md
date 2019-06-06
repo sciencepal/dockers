@@ -36,11 +36,11 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 2. Enter nodemaster : **docker exec -u hadoop -it nodemaster /bin/bash**
 
-3. Create directory in HDFS : **hdfs mkdir -p /user/hadoop/test**
+3. Create directory in HDFS : hadoop@nodemaster:/$ **hdfs mkdir -p /user/hadoop/test**
 
-4. Get file from container local to HDFS : **hdfs dfs -put /tmp/test_data.csv /user/hadoop/test/**
+4. Get file from container local to HDFS : hadoop@nodemaster:/$ **hdfs dfs -put /tmp/test_data.csv /user/hadoop/test/**
 
-5. execute Hive by : **hive**
+5. execute Hive by : hadoop@nodemaster:/$ **hive**
 
 6. In hive terminal : hive>**create schema if not exists test;**
 
