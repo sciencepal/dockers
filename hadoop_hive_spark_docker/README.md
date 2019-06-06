@@ -48,8 +48,8 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 8. **Results**
 
-hive> **select * from test.test_data where row3 > 2;**
-OK
+hive> **select * from test.test_data where row3 > 2;**<br />
+OK<br />
 1	122	5	838985046<br />
 1	185	4	838983525<br />
 1	231	4	838983392<br />
