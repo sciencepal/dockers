@@ -8,4 +8,4 @@ For Hive: Choose Hive version > 2.0.0 (preferably < 3.0) from here https://archi
 
 For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/spark/
 
-**Update: Added pyspark support by installing python 2.7** ... Change to your default python version in hadoop Dockerfile
+**Update: Added pyspark support by installing python 2.7** ... Change to your default python version in spark Dockerfile
