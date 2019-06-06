@@ -1,5 +1,6 @@
 This repo aims at creating a 3 node hadoop cluster having 1 master and 2 worker nodes using docker.io containers. You can read more about the project here: https://medium.com/@aditya.pal/setup-a-3-node-hadoop-spark-hive-cluster-from-scratch-using-docker-332dae6b98d0
 
+<br />
 **NOTE: Please verify that the download links in the Dockerfiles are still active.**
 
 For Hadoop: Choose any Hadoop version > 2.0 from here https://archive.apache.org/dist/hadoop/core/
@@ -8,8 +9,10 @@ For Hive: Choose Hive version > 2.0.0 (preferably < 3.0) from here https://archi
 
 For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/spark/
 
+<br />
 **Update: Added pyspark support by installing python 2.7** ... Change to your default python version in spark Dockerfile
 
+<br />
 **Instructions for use**
 
 1. Build cluster using **./build.sh**
@@ -22,6 +25,7 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 5. Once all work is done, bring down cluster by **./cluster.sh stop**
 
+<br />
 **Tests Done with Hive**
 
 1. Copy file from local to nodemaster container : **docker cp test_data.csv nodemaster:/tmp/**
@@ -42,15 +46,15 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 hive> **select * from test.test_data where row3 > 2;**
 OK
-1	122	5	838985046
-1	185	4	838983525
-1	231	4	838983392
-1	292	3	838983421
-1	316	3	838983392
-1	377	3	838983834
-1	420	5	838983834
-1	466	4	838984679
-1	480	5	838983653
-1	539	5	838984068
-1	586	3	838984068
-1	588	5	838983339
+1	122	5	838985046<br />
+1	185	4	838983525<br />
+1	231	4	838983392<br />
+1	292	3	838983421<br />
+1	316	3	838983392<br />
+1	377	3	838983834<br />
+1	420	5	838983834<br />
+1	466	4	838984679<br />
+1	480	5	838983653<br />
+1	539	5	838984068<br />
+1	586	3	838984068<br />
+1	588	5	838983339<br />
