@@ -9,3 +9,48 @@ For Hive: Choose Hive version > 2.0.0 (preferably < 3.0) from here https://archi
 For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/spark/
 
 **Update: Added pyspark support by installing python 2.7** ... Change to your default python version in spark Dockerfile
+
+**Instructions for use**
+
+1. Build cluster using **./build.sh**
+
+2. Once all images are built, start cluster by **./cluster.sh start**
+
+3. Verify the containers running by **docker ps -as**. nodemaster, node2, node3 and psqlhms containers should be running.
+
+4. Enter any container this way: **docker exec -u hadoop -it nodemaster /bin/bash**
+
+5. Once all work is done, bring down cluster by **./cluster.sh stop**
+
+**Tests Done with Hive**
+
+1. Copy file from local to nodemaster container : **docker cp test_data.csv nodemaster:/tmp/**
+
+2. Enter nodemaster : **docker exec -u hadoop -it nodemaster /bin/bash**
+
+3. Create directory in HDFS : **hdfs mkdir -p /user/hadoop/test**
+
+4. Get file from container local to HDFS : **hdfs dfs -put /tmp/test_data.csv /user/hadoop/test/**
+
+5. execute Hive by : **hive**
+
+6. In hive terminal : hive>**create schema if not exists test;**
+
+7. In hive terminal : hive>**create external table if not exists test.test_data (row1 int, row2 int, row3 int, row4 int) row format delimited fields terminated by ',' stored as textfile location 'hdfs://172.18.1.1:9000/user/hadoop/test/';**
+
+8. **Results**
+
+hive> **select * from test.test_data where row3 > 2;**
+OK
+1	122	5	838985046
+1	185	4	838983525
+1	231	4	838983392
+1	292	3	838983421
+1	316	3	838983392
+1	377	3	838983834
+1	420	5	838983834
+1	466	4	838984679
+1	480	5	838983653
+1	539	5	838984068
+1	586	3	838984068
+1	588	5	838983339
