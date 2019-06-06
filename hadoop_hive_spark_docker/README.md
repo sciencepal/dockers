@@ -44,21 +44,24 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 6. In hive terminal : hive>**create schema if not exists test;**
 
-7. In hive terminal : hive>**create external table if not exists test.test_data (row1 int, row2 int, row3 int, row4 int) row format delimited fields terminated by ',' stored as textfile location 'hdfs://172.18.1.1:9000/user/hadoop/test/';**
+7. In hive terminal : hive>**create external table if not exists test.test_data (row1 int, row2 int, row3 decimal(10,3), row4 int) row format delimited fields terminated by ',' stored as textfile location 'hdfs://172.18.1.1:9000/user/hadoop/test/';**
 
 8. **Results**
 
-hive> **select * from test.test_data where row3 > 2;**<br />
+hive> **select * from test.test_data where row3 > 2.499;**<br />
 OK<br />
-1	122	5	838985046<br />
-1	185	4	838983525<br />
-1	231	4	838983392<br />
-1	292	3	838983421<br />
-1	316	3	838983392<br />
-1	377	3	838983834<br />
-1	420	5	838983834<br />
-1	466	4	838984679<br />
-1	480	5	838983653<br />
-1	539	5	838984068<br />
-1	586	3	838984068<br />
-1	588	5	838983339<br />
+1	122	5.000	838985046<br />
+1	185	4.500	838983525<br />
+1	231	4.000	838983392<br />
+1	292	3.500	838983421<br />
+1	316	3.000	838983392<br />
+1	329	2.500	838983392<br />
+1	377	3.500	838983834<br />
+1	420	5.000	838983834<br />
+1	466	4.000	838984679<br />
+1	480	5.000	838983653<br />
+1	520	2.500	838984679<br />
+1	539	5.000	838984068<br />
+1	586	3.500	838984068<br />
+1	588	5.000	838983339<br />
+
