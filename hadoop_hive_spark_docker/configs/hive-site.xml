@@ -39,4 +39,12 @@
      <value>/user/hive/metastore</value>
      <description>Metastore Warehouse</description>
   </property>
+  <property>
+     <name>hive.server2.enable.doAs </name>
+     <value>false</value>
+  </property>
+  <property>
+	 <name>hive.security.authorization.enabled</name>
+	 <value>false</value>
+  </property>  
 </configuration>

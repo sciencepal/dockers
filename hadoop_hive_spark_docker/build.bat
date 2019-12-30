@@ -1,19 +1,20 @@
-#!/bin/bash
+@echo off
+REM Construccion de los Contendores Docker
 
-# generate ssh key
-echo "Y" | ssh-keygen -t rsa -P "" -f configs/id_rsa
-
-# Hadoop build
+REM Hadoop build
 docker build -f ./hadoop/Dockerfile . -t hadoop
 
-# Spark
+REM Spark
 docker build -f ./spark/Dockerfile . -t spark
 
-# PostgreSQL Hive Metastore Server
+REM PostgreSQL Hive Metastore Server
 docker build -f ./postgresql-hms/Dockerfile . -t postgresql-hms
 
-# Hive
+REM Hive
 docker build -f ./hive/Dockerfile . -t hive
 
-
+REM Edge
 docker build -f ./edge/Dockerfile . -t edge
+
+REM hue
+docker build -f ./hue/Dockerfile . -t hue
