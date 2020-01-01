@@ -1,4 +1,4 @@
-FROM spark
+FROM peterstraussen/hadoop_cluster:spark
 
 MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 

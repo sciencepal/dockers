@@ -1,17 +1,6 @@
-FROM hive
+FROM peterstraussen/hadoop_cluster:hive
 
 USER root
-
-
-# get nifi sources
-RUN wget http://archive.apache.org/dist/nifi/1.10.0/nifi-1.10.0-bin.tar.gz -P /home/hadoop/
-RUN tar -xzf /home/hadoop/nifi-1.10.0-bin.tar.gz -C /home/hadoop/
-RUN mv /home/hadoop/nifi-1.10.0 /home/hadoop/nifi
-RUN rm -rf /home/hadoop/nifi-1.10.0*
-
-ADD configs/nifi.properties /home/hadoop/nifi/conf/nifi.properties
-RUN chown hadoop -R /home/hadoop/nifi
-
 
 # get flume sources
 RUN wget http://archive.apache.org/dist/flume/1.9.0/apache-flume-1.9.0-bin.tar.gz -P /home/hadoop/

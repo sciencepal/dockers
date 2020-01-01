@@ -1,21 +1,21 @@
 @echo off
 
-IF "%1"=="start" (
+IF "%1"=="install" (
   docker network create --subnet=172.18.0.0/16 hadoopnet
 
   rem Starting Postresql Hive metastore
   ECHO ">> Starting postgresql hive metastore ..."
-  docker run -d --net hadoopnet --ip 172.18.1.4 --hostname psqlhms --name psqlhms -it postgresql-hms
+  docker run -d --net hadoopnet --ip 172.18.1.4 --hostname psqlhms --name psqlhms -it peterstraussen/hadoop_cluster:postgresql-hms
   TIMEOUT /t 5 /nobreak > nul
   
   rem 3 nodes
-  ECHO ">> Starting nodes master and worker nodes ..."
-  docker run -d --net hadoopnet --ip 172.18.1.1 -p 8088:8088 --hostname nodemaster --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --name nodemaster -it hive
-  docker run -d --net hadoopnet --ip 172.18.1.2 --hostname node2 --add-host nodemaster:172.18.1.1 --add-host node3:172.18.1.3 --name node2 -it spark
-  docker run -d --net hadoopnet --ip 172.18.1.3 --hostname node3 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --name node3 -it spark
-  docker run -d --net hadoopnet --ip 172.18.1.5 --hostname edge --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name edge -it edge 
-  docker run -d --net hadoopnet --ip 172.18.1.6 -p 8080:8080 --hostname nifi --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name nifi -it nifi 
-  docker run -d --net hadoopnet --ip 172.18.1.7  -p 8888:8888 --hostname huenode --add-host edge:172.18.1.5 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name hue -it hue 
+  ECHO ">> Starting master and worker nodes ..."
+  docker run -d --net hadoopnet --ip 172.18.1.1 -p 8088:8088 --hostname nodemaster --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --name nodemaster -it peterstraussen/hadoop_cluster:hive
+  docker run -d --net hadoopnet --ip 172.18.1.2 --hostname node2 --add-host nodemaster:172.18.1.1 --add-host node3:172.18.1.3 --name node2 -it peterstraussen/hadoop_cluster:spark
+  docker run -d --net hadoopnet --ip 172.18.1.3 --hostname node3 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --name node3 -it peterstraussen/hadoop_cluster:spark
+  docker run -d --net hadoopnet --ip 172.18.1.5 --hostname edge --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name edge -it peterstraussen/hadoop_cluster:edge 
+  docker run -d --net hadoopnet --ip 172.18.1.6 -p 8080:8080 --hostname nifi --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name nifi -it peterstraussen/hadoop_cluster:nifi 
+  docker run -d --net hadoopnet --ip 172.18.1.7  -p 8888:8888 --hostname huenode --add-host edge:172.18.1.5 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name hue -it peterstraussen/hadoop_cluster:hue 
 
   rem Format nodemaster
   ECHO ">> Formatting hdfs ..."
@@ -27,24 +27,37 @@ IF "%1"=="start" (
 
 IF "%1"=="stop" (
   call :stopServices
-  docker rm nodemaster node2 node3 psqlhms edge hue nifi
-  docker network rm hadoopnet
   EXIT /B 0
 )
 
 
 IF "%1"=="uninstall" (
   call :stopServices
-  docker rmi hadoop spark hive postgresql-hms hue edge nifi -f
+  docker rmi peterstraussen/hadoop_cluster:hadoop peterstraussen/hadoop_cluster:spark peterstraussen/hadoop_cluster:hive peterstraussen/hadoop_cluster:postgresql-hms peterstraussen/hadoop_cluster:hue peterstraussen/hadoop_cluster:edge peterstraussen/hadoop_cluster:nifi -f
   docker network rm hadoopnet
   docker system prune -f
   EXIT /B 0
 )
 
-ECHO "Usage: cluster.bat start|stop|uninstall"
+
+IF "%1"=="start" (
+  docker start nodemaster node2 node3 psqlhms edge hue nifi
+  call :startServices
+  EXIT /B 0
+)
+
+IF "%1"=="pull_images" (
+  docker pull -a peterstraussen/hadoop_cluster
+  EXIT /B 0
+)
+
+ECHO "Usage: cluster.bat pull_images|install|start|stop|uninstall"
+ECHO "                 pull_images - download all docker images"
+ECHO "                 install - Prepare to run and start for first time all containers"
 ECHO "                 start  - start existing containers"
 ECHO "                 stop   - stop running processes"
 ECHO "                 uninstall - remove all docker images"
+
 
 EXIT /B 0
 
