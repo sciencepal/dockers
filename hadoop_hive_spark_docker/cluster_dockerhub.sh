@@ -35,6 +35,8 @@ function startServices {
   echo ">> Starting kafka & Zookeeper ..."
   docker exec -u hadoop -d edge /home/hadoop/kafka/bin/zookeeper-server-start.sh -daemon  /home/hadoop/kafka/config/zookeeper.properties
   docker exec -u hadoop -d edge /home/hadoop/kafka/bin/kafka-server-start.sh -daemon  /home/hadoop/kafka/config/server.properties
+  echo ">> Starting Zeppelin ..."
+  docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh start
   echo "Hadoop info @ nodemaster: http://172.18.1.1:8088/cluster"
   echo "DFS Health @ nodemaster : http://172.18.1.1:50070/dfshealth"
   echo "MR-JobHistory Server @ nodemaster : http://172.18.1.1:19888"
@@ -43,6 +45,7 @@ function startServices {
   echo "Zookeeper @ edge : http://172.18.1.5:2181"
   echo "Kafka @ edge : http://172.18.1.5:9092"
   echo "Nifi @ edge : http://172.18.1.5:8080/nifi & from host @ http://localhost:8080/nifi"
+  echo "Zeppelin @ zeppelin : http://172.18.1.6:8081 & from host @ http://localhost:8081"
 }
 
 function stopServices {
@@ -51,8 +54,9 @@ function stopServices {
   docker exec -u hadoop -d node2 stop-slave.sh
   docker exec -u hadoop -d node3 stop-slave.sh
   docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh stop
+  docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh stop
   echo ">> Stopping containers ..."
-  docker stop nodemaster node2 node3 psqlhms edge hue nifi
+  docker stop nodemaster node2 node3 psqlhms edge hue nifi zeppelin
 }
 
 if [[ $1 = "install" ]]; then
@@ -70,7 +74,8 @@ if [[ $1 = "install" ]]; then
   docker run -d --net hadoopnet --ip 172.18.1.3 --hostname node3 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --name node3 -it peterstraussen/hadoop_cluster:spark
   docker run -d --net hadoopnet --ip 172.18.1.5 --hostname edge --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name edge -it peterstraussen/hadoop_cluster:edge 
   docker run -d --net hadoopnet --ip 172.18.1.6 -p 8080:8080 --hostname nifi --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name nifi -it peterstraussen/hadoop_cluster:nifi 
-  docker run -d --net hadoopnet --ip 172.18.1.7  -p 8888:8888 --hostname huenode --add-host edge:172.18.1.5 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name hue -it peterstraussen/hadoop_cluster:hue 
+  docker run -d --net hadoopnet --ip 172.18.1.7  -p 8888:8888 --hostname huenode --add-host edge:172.18.1.5 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name hue -it peterstraussen/hadoop_cluster:hue
+  docker run -d --net hadoopnet --ip 172.18.1.8  -p 8081:8081 --hostname zeppelin --add-host edge:172.18.1.5 --add-host nodemaster:172.18.1.1 --add-host node2:172.18.1.2 --add-host node3:172.18.1.3 --add-host psqlhms:172.18.1.4 --name zeppelin -it peterstraussen/hadoop_cluster:zeppelin
 
   # Format nodemaster
   echo ">> Formatting hdfs ..."
@@ -88,14 +93,14 @@ fi
 
 if [[ $1 = "uninstall" ]]; then
   stopServices
-  docker rmi hadoop spark hive postgresql-hms -f
+  docker rmi peterstraussen/hadoop_cluster:hadoop peterstraussen/hadoop_cluster:spark peterstraussen/hadoop_cluster:hive peterstraussen/hadoop_cluster:postgresql-hms peterstraussen/hadoop_cluster:hue peterstraussen/hadoop_cluster:edge peterstraussen/hadoop_cluster:nifi peterstraussen/hadoop_cluster:zeppelin -f
   docker network rm hadoopnet
   docker system prune -f
   exit
 fi
 
 if [[ $1 = "start" ]]; then  
-  docker start nodemaster node2 node3 psqlhms edge hue nifi
+  docker start nodemaster node2 node3 psqlhms edge hue nifi zeppelin
   startServices
   exit
 fi

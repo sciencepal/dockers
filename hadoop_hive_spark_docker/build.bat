@@ -28,3 +28,7 @@ docker push peterstraussen/hadoop_cluster:edge
 REM hue
 docker build -f ./hue/Dockerfile . -t peterstraussen/hadoop_cluster:hue
 docker push peterstraussen/hadoop_cluster:hue
+
+REM zeppelin
+docker build -f ./zeppelin/Dockerfile . -t peterstraussen/hadoop_cluster:zeppelin
+docker push peterstraussen/hadoop_cluster:zeppelin

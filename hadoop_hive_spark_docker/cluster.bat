@@ -83,6 +83,8 @@ docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh start
 ECHO ">> Starting kafka Server ..."
 docker exec -u hadoop -d edge /home/hadoop/kafka/bin/zookeeper-server-start.sh -daemon  /home/hadoop/kafka/config/zookeeper.properties
 docker exec -u hadoop -d edge /home/hadoop/kafka/bin/kafka-server-start.sh -daemon  /home/hadoop/kafka/config/server.properties
+ECHO ">> Starting Zeppelin ..."
+bin/zeppelin-daemon.sh start
 ECHO "Hadoop info @ nodemaster: http://172.18.1.1:8088/cluster"
 ECHO "DFS Health @ nodemaster : http://172.18.1.1:50070/dfshealth"
 ECHO "MR-JobHistory Server @ nodemaster : http://172.18.1.1:19888"
@@ -90,7 +92,8 @@ ECHO "Spark info @ nodemaster  : http://172.18.1.1:8080"
 ECHO "Spark History Server @ nodemaster : http://172.18.1.1:18080"
 ECHO "Zookeeper @ edge : http://172.18.1.5:2181"
 ECHO "Kafka @ edge : http://172.18.1.5:9092"
-ECHO "Nifi @ edge : http://172.18.1.5:8080/nifi & from host @ http://localhost:8080/nifi"
+ECHO "Nifi @ nifi : http://172.18.1.6:8080/nifi & from host @ http://localhost:8080/nifi"
+ECHO "Zeppelin @ zeppelin : http://172.18.1.6:8081 & from host @ http://localhost:8081"
 EXIT /B 0
 
 :stopServices
