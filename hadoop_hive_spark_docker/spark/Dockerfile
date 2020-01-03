@@ -6,7 +6,7 @@ USER root
 
 # installing python for pyspark
 # change python version as per your requirement
-RUN apt install -y python
+RUN apt install -y python python3
 
 # get sources
 RUN mkdir /usr/share/scala
