@@ -56,7 +56,7 @@ function stopServices {
   docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh stop
   docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh stop
   echo ">> Stopping containers ..."
-  docker stop nodemaster node2 node3 psqlhms edge hue nifi zeppelin
+  docker stop nodemaster node2 node3 edge hue nifi zeppelin psqlhms
 }
 
 if [[ $1 = "install" ]]; then
@@ -100,7 +100,7 @@ if [[ $1 = "uninstall" ]]; then
 fi
 
 if [[ $1 = "start" ]]; then  
-  docker start nodemaster node2 node3 psqlhms edge hue nifi zeppelin
+  docker start psqlhms nodemaster node2 node3 edge hue nifi zeppelin
   startServices
   exit
 fi

@@ -42,7 +42,7 @@ IF "%1"=="uninstall" (
 
 
 IF "%1"=="start" (
-  docker start nodemaster node2 node3 psqlhms edge hue nifi zeppelin
+  docker start psqlhms nodemaster node2 node3 edge hue nifi zeppelin
   call :startServices
   EXIT /B 0
 )
@@ -118,5 +118,5 @@ docker exec -u hadoop -d node3 stop-slave.sh
 docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh stop
 docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh stop
 ECHO ">> Stopping containers ..."
-docker stop nodemaster node2 node3 psqlhms edge hue nifi zeppelin
+docker stop nodemaster node2 node3 edge hue nifi zeppelin psqlhms
 EXIT /B 0
