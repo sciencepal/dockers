@@ -1,4 +1,6 @@
-This repo aims at creating a 3 node hadoop cluster having 1 master and 2 worker nodes using docker.io containers. You can read more about the project here: https://medium.com/@aditya.pal/setup-a-3-node-hadoop-spark-hive-cluster-from-scratch-using-docker-332dae6b98d0
+This repo was started initially with an aim of creating a 3 node hadoop cluster having 1 master and 2 worker nodes with Hadoop, Hive and Spark using docker.io containers. You can read more about the original project here: https://medium.com/@aditya.pal/setup-a-3-node-hadoop-spark-hive-cluster-from-scratch-using-docker-332dae6b98d0
+
+**UPDATE** : thanks to pedro-gonglaron, this project now has 1 master, 2 workers, 1 edge node (with Flume, Sqoop and Kafka !!) , 1 Hue service node, 1 Zeppelin service node and 1 Nifi node.
 
 <br />
 
@@ -20,9 +22,9 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 1. Build cluster using **./build.sh**
 
-2. Once all images are built, start cluster by **./cluster.sh start**
+2. Once all images are built, start cluster by **./cluster_dockerhub.sh start**
 
-3. Verify the containers running by **docker ps -as**. nodemaster, node2, node3 and psqlhms containers should be running.
+3. Verify the containers running by **docker ps -as**. nodemaster, node2, node3, psqlhms edge, nifi, huenode, zeppelin containers should be running.
 
 4. Enter any container this way: **docker exec -u hadoop -it nodemaster /bin/bash**
 
