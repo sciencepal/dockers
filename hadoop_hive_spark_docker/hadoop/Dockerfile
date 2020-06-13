@@ -16,15 +16,8 @@ RUN apt-get update
 # RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 # RUN apt-get install -y oracle-java8-installer
 
-
 # OpenJDK installation
-RUN apt-get install -y openjdk-8-jre
-
-# ssh for communication between nodes
-RUN apt-get install -y openssh-server
-
-# install editor of your choice
-RUN apt-get install -y vim
+RUN apt-get install -y openjdk-8-jre openjdk-8-jdk openssh-server vim
 
 # add hadoop user
 RUN useradd -m -s /bin/bash hadoop
@@ -38,6 +31,8 @@ RUN echo "PasswordAuthentication no" >> /home/hadoop/.ssh/config
 # copy keys
 ADD configs/id_rsa.pub /home/hadoop/.ssh/id_rsa.pub
 ADD configs/id_rsa /home/hadoop/.ssh/id_rsa
+RUN chmod 400 /home/hadoop/.ssh/id_rsa
+RUN chmod 400 /home/hadoop/.ssh/id_rsa.pub
 RUN cat /home/hadoop/.ssh/id_rsa.pub >> /home/hadoop/.ssh/authorized_keys
 RUN chown hadoop -R /home/hadoop/.ssh
 

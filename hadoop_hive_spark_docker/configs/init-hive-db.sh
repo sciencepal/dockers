@@ -15,5 +15,16 @@ SELECT 'GRANT SELECT,INSERT,UPDATE,DELETE ON "' || schemaname || '"."' || tablen
 FROM pg_tables
 WHERE tableowner = CURRENT_USER and schemaname = 'public';
   \o
-  \i /tmp/grant-privs
+  \i /tmp/grant-privs  
+  CREATE USER hue WITH PASSWORD 'hue';
+  ALTER USER hue WITH SUPERUSER;
+  CREATE DATABASE hue;
+  GRANT ALL PRIVILEGES ON DATABASE hue TO hue;
+  \c hue
+  \o /tmp/grant-privs
+SELECT 'GRANT SELECT,INSERT,UPDATE,DELETE ON "' || schemaname || '"."' || tablename || '" TO hue ;'
+FROM pg_tables
+WHERE tableowner = CURRENT_USER and schemaname = 'public';
+  \o
+  \i /tmp/grant-privs  
 EOSQL
