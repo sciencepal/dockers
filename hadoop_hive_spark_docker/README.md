@@ -22,7 +22,7 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 1. Build cluster using **./build.sh**
 
-2. Once all images are built, start cluster by **./cluster_dockerhub.sh start**
+2. Once all images are built, start cluster by **./cluster.sh start**
 
 3. Verify the containers running by **docker ps -as**. nodemaster, node2, node3, psqlhms edge, nifi, huenode, zeppelin containers should be running.
 
