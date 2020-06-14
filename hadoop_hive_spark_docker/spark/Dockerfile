@@ -1,4 +1,4 @@
-FROM peterstraussen/hadoop_cluster:hadoop
+FROM sciencepal/hadoop_cluster:hadoop
 
 MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 

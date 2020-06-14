@@ -1,4 +1,6 @@
-FROM peterstraussen/hadoop_cluster:hive
+FROM sciencepal/hadoop_cluster:hive
+
+MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 
 USER root
 

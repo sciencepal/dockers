@@ -1,5 +1,7 @@
 FROM gethue/hue:latest
 
+MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
+
 ADD configs/hue.ini /usr/share/hue/desktop/conf/hue.ini
 ADD configs/hue.ini /usr/share/hue/desktop/conf/hue-overrides.ini 
 ADD configs/hue.ini /usr/share/hue/tools/docker/hue/conf/hue-overrides.ini
