@@ -1,6 +1,6 @@
 This repo was started initially with an aim of creating a 3 node hadoop cluster having 1 master and 2 worker nodes with Hadoop, Hive and Spark using docker.io containers. You can read more about the original project here: https://medium.com/@aditya.pal/setup-a-3-node-hadoop-spark-hive-cluster-from-scratch-using-docker-332dae6b98d0
 
-**UPDATE** : thanks to pedro-gonglaron, this project now has 1 master, 2 workers, 1 edge node (with Flume, Sqoop and Kafka !!) , 1 Hue service node, 1 Zeppelin service node and 1 Nifi node.
+**UPDATE** : thanks to pedro-glongaron, this project now has 1 master, 2 workers, 1 edge node (with Flume, Sqoop and Kafka !!) , 1 Hue service node, 1 Zeppelin service node and 1 Nifi node.
 
 <br />
 
