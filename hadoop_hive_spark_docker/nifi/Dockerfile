@@ -42,6 +42,11 @@ RUN tar -xzf /home/hadoop/nifi-1.10.0-bin.tar.gz -C /home/hadoop/
 RUN mv /home/hadoop/nifi-1.10.0 /home/hadoop/nifi
 RUN rm -rf /home/hadoop/nifi-1.10.0*
 
+# set nifi-env.sh
+RUN echo -e "\n" >> /home/hadoop/nifi/bin/nifi-env.sh
+RUN echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> /home/hadoop/nifi/bin/nifi-env.sh
+RUN echo "export TOOLS_JAR=${JAVA_HOME}/lib/tools.jar" >> /home/hadoop/nifi/bin/nifi-env.sh
+
 ADD configs/nifi.properties /home/hadoop/nifi/conf/nifi.properties
 RUN chown hadoop -R /home/hadoop/nifi
 
