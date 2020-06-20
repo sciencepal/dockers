@@ -64,7 +64,7 @@ if [[ $1 = "install" ]]; then
 
   # Starting Postresql Hive metastore
   echo ">> Starting postgresql hive metastore ..."
-  docker run -d --net hadoopnet --ip 172.20.1.4 --hostname psqlhms --name psqlhms -it sciencepal/hadoop_cluster:postgresql-hms
+  docker run -d --net hadoopnet --ip 172.20.1.4 --hostname psqlhms --name psqlhms -e POSTGRES_PASSWORD=hive -it sciencepal/hadoop_cluster:postgresql-hms
   sleep 5
   
   # 3 nodes
