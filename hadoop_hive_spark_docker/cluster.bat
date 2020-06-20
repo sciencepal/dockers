@@ -5,7 +5,7 @@ IF "%1"=="install" (
 
   rem Starting Postresql Hive metastore
   ECHO ">> Starting postgresql hive metastore ..."
-  docker run -d --net hadoopnet --ip 172.20.1.4 --hostname psqlhms --name psqlhms -it sciencepal/hadoop_cluster:postgresql-hms
+  docker run -d --net hadoopnet --ip 172.20.1.4 --hostname psqlhms --name psqlhms -e POSTGRES_PASSWORD=hive -it sciencepal/hadoop_cluster:postgresql-hms
   TIMEOUT /t 5 /nobreak > nul
   
   rem 3 nodes
