@@ -46,7 +46,7 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 6. In hive terminal : hive>**create schema if not exists test;**
 
-7. In hive terminal : hive>**create external table if not exists test.test_data (row1 int, row2 int, row3 decimal(10,3), row4 int) row format delimited fields terminated by ',' stored as textfile location 'hdfs://172.18.1.1:9000/user/hadoop/test/';**
+7. In hive terminal : hive>**create external table if not exists test.test_data (row1 int, row2 int, row3 decimal(10,3), row4 int) row format delimited fields terminated by ',' stored as textfile location 'hdfs://172.20.1.1:9000/user/hadoop/test/';**
 
 8. **Results**
 
