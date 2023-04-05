@@ -21,7 +21,7 @@ RUN chown hadoop -R /home/hadoop/kafka
 ENV KAFKA_HOME=/home/hadoop/kafka
 ENV PATH $KAFKA_HOME/bin:$PATH
 
-
+# get Sqoop sources
 # RUN wget http://archive.apache.org/dist/sqoop/1.4.7/sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz -P /home/hadoop/
 # RUN tar -xzf /home/hadoop/sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz -C /home/hadoop/
 # RUN mv /home/hadoop/sqoop-1.4.7.bin__hadoop-2.6.0 /home/hadoop/sqoop

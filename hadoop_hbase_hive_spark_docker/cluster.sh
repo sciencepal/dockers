@@ -69,7 +69,8 @@ function stopServices {
   # docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh stop
   # docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh stop
   echo ">> Stopping containers ..."
-  docker stop nodemaster node2 node3 edge hue nifi zeppelin psqlhms
+  # docker stop nodemaster node2 node3 edge hue nifi zeppelin psqlhms
+  docker stop nodemaster node2 node3 psqlhms hbase
 }
 
 if [[ $1 = "install" ]]; then
@@ -85,7 +86,7 @@ if [[ $1 = "install" ]]; then
   docker run -d --net hadoopnet --ip 172.20.1.1 -p 8088:8088 --hostname nodemaster --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host hbase:172.20.1.9 --name nodemaster -it sciencepal/hadoop_cluster:hive
   docker run -d --net hadoopnet --ip 172.20.1.2 --hostname node2 --add-host nodemaster:172.20.1.1 --add-host node3:172.20.1.3 --add-host hbase:172.20.1.9 --name node2 -it sciencepal/hadoop_cluster:spark
   docker run -d --net hadoopnet --ip 172.20.1.3 --hostname node3 --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host hbase:172.20.1.9 --name node3 -it sciencepal/hadoop_cluster:spark
-  docker run -d --net hadoopnet --ip 172.20.1.5 --hostname edge --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --add-host hbase:172.20.1.9 --name edge -it sciencepal/hadoop_cluster:edge 
+  #docker run -d --net hadoopnet --ip 172.20.1.5 --hostname edge --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --add-host hbase:172.20.1.9 --name edge -it sciencepal/hadoop_cluster:edge 
   docker run -d --net hadoopnet --ip 172.20.1.9 -p 16010:16010 --hostname hbase --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --add-host hbase:172.20.1.9 --name hbase -it sciencepal/hadoop_cluster:hbase 
   #docker run -d --net hadoopnet --ip 172.20.1.6 -p 8080:8080 --hostname nifi --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --name nifi -it sciencepal/hadoop_cluster:nifi 
   #docker run -d --net hadoopnet --ip 172.20.1.7  -p 8888:8888 --hostname huenode --add-host edge:172.20.1.5 --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --name hue -it sciencepal/hadoop_cluster:hue

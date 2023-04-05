@@ -53,10 +53,14 @@
   </property>
   <property>
     <name>hbase.zookeeper.property.dataDir</name>
-    <value>/home/hduser/zookeeper</value>
+    <value>/home/hadoop/zookeeper</value>
   </property>
     <property>
     <name>dfs.replication</name>
     <value>1</value>
+    <property>
+  <name>hbase.unsafe.stream.capability.enforce</name>
+  <value>false</value>
+</property>
   </property>
 </configuration>

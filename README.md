@@ -2,7 +2,7 @@
  
  ## hadoop_hbase_hive_spark_docker
  
-**UPDATE** : To have a lighter platform including HBASE service this repo will deploy only Hadoop, Hbase, Zookeeper, Hive, Hive Metastore (PostGresSQL) and Spark only. It is possible to add the other services back, together with Hbase, modifying the script files for build and cluster. 
+**UPDATE** : To have a lighter platform including HBASE service this repo will deploy only Hadoop, Hbase, Zookeeper, Hive, Hive Metastore (PostGresSQL) and Spark. It is possible to add the other services back, together with Hbase, modifying the script files for build and cluster. 
 
 ## Services
 
