@@ -1,5 +1,5 @@
 *.gz
 *.tgz
 hadoop_hbase_hive_spark_docker/configs/id_rsa*
+.github/
 
-/.project
