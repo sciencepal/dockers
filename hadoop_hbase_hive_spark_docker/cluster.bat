@@ -64,7 +64,7 @@ EXIT /B 0
 
 rem Bring the services up
 :startServices
-docker start nodemaster node2 node3
+docker start nodemaster node2 node3 hbase
 TIMEOUT /t 5 /nobreak > nul
 ECHO ">> Starting hdfs ..."
 docker exec -u hadoop -it nodemaster start-dfs.sh
@@ -89,25 +89,37 @@ docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /user/hive/warehouse
 docker exec -u hadoop -it nodemaster hdfs dfs -chmod -R 777 /tmp
 docker exec -u hadoop -it nodemaster hdfs dfs -chmod -R 777 /user/hive/warehouse
 TIMEOUT /t 5 /nobreak > nul
+ECHO ">> Preparing hdfs for hbase ..."
+docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /tmp
+docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /user/hbase
+docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /hbase
+docker exec -u hadoop -it nodemaster hdfs dfs -chmod g+w /tmp
+docker exec -u hadoop -it nodemaster hdfs dfs -chmod g+w /hbase
+docker exec -u hadoop -it nodemaster hdfs dfs -chmod g+w /user/hbase
+TIMEOUT /t 5 /nobreak > nul
 ECHO ">> Starting Hive Metastore ..."
 docker exec -u hadoop -d nodemaster hive --service metastore
 docker exec -u hadoop -d nodemaster hive --service hiveserver2
-ECHO ">> Starting Nifi Server ..."
-docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh start
-ECHO ">> Starting kafka Server ..."
-docker exec -u hadoop -d edge /home/hadoop/kafka/bin/zookeeper-server-start.sh -daemon  /home/hadoop/kafka/config/zookeeper.properties
-docker exec -u hadoop -d edge /home/hadoop/kafka/bin/kafka-server-start.sh -daemon  /home/hadoop/kafka/config/server.properties
-ECHO ">> Starting Zeppelin ..."
-docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh start
+@REM ECHO ">> Starting Nifi Server ..."
+@REM docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh start
+@REM ECHO ">> Starting kafka Server ..."
+@REM docker exec -u hadoop -d edge /home/hadoop/kafka/bin/zookeeper-server-start.sh -daemon  /home/hadoop/kafka/config/zookeeper.properties
+@REM docker exec -u hadoop -d edge /home/hadoop/kafka/bin/kafka-server-start.sh -daemon  /home/hadoop/kafka/config/server.properties
+@REM ECHO ">> Starting Zeppelin ..."
+@REM docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh start
+ECHO ">> Starting HBASE ..."
+docker exec -u hadoop -d hbase /home/hadoop/hbase/bin/start-hbase.sh
+TIMEOUT /t 5 /nobreak > nul
 ECHO "Hadoop info @ nodemaster: http://172.20.1.1:8088/cluster"
 ECHO "DFS Health @ nodemaster : http://172.20.1.1:50070/dfshealth"
 ECHO "MR-JobHistory Server @ nodemaster : http://172.20.1.1:19888"
 ECHO "Spark info @ nodemaster  : http://172.20.1.1:8080"
 ECHO "Spark History Server @ nodemaster : http://172.20.1.1:18080"
-ECHO "Zookeeper @ edge : http://172.20.1.5:2181"
-ECHO "Kafka @ edge : http://172.20.1.5:9092"
-ECHO "Nifi @ edge : http://172.20.1.5:8080/nifi & from host @ http://localhost:8080/nifi"
-ECHO "Zeppelin @ zeppelin : http://172.20.1.6:8081 & from host @ http://localhost:8081"
+ECHO "Zookeeper @ hbase : http://172.20.1.9:2181"
+@REM ECHO "Kafka @ edge : http://172.20.1.5:9092"
+@REM ECHO "Nifi @ edge : http://172.20.1.5:8080/nifi & from host @ http://localhost:8080/nifi"
+@REM ECHO "Zeppelin @ zeppelin : http://172.20.1.6:8081 & from host @ http://localhost:8081"
+ECHO "HBASE @ hbase : http://172.20.1.9:16010 & from host @ http://localhost:16010"
 EXIT /B 0
 
 :stopServices
@@ -115,8 +127,10 @@ ECHO ">> Stopping Spark Master and slaves ..."
 docker exec -u hadoop -d nodemaster stop-master.sh
 docker exec -u hadoop -d node2 stop-slave.sh
 docker exec -u hadoop -d node3 stop-slave.sh
-docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh stop
-docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh stop
+docker exec -u hadoop -d hbase /home/hadoop/hbase/bin/stop-hbase.sh 
+@REM docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh stop
+@REM docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh stop
 ECHO ">> Stopping containers ..."
-docker stop nodemaster node2 node3 edge hue nifi zeppelin psqlhms
+@REM docker stop nodemaster node2 node3 edge hue nifi zeppelin psqlhms
+docker stop nodemaster node2 node3 psqlhms hbase
 EXIT /B 0
