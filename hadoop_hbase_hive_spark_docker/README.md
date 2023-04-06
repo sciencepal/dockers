@@ -35,13 +35,15 @@ For Spark: Choose Spark version > 2.0 from here https://archive.apache.org/dist/
 
 1. Build cluster using **./build.sh**
 
-2. Once all images are built, start cluster by **./cluster.sh start**
+2. Once all images are built, install/deploye cluster containers with all configurations by **./cluster.sh Install**
 
-3. Verify the containers running by **docker ps -as**. nodemaster, node2, node3, psqlhms and hbase containers should be running.
+3. Once all containers are created/deployed, start cluster by **./cluster.sh start**
 
-4. Enter any container this way: **docker exec -u hadoop -it nodemaster /bin/bash**
+4. Verify the containers running by **docker ps -as**. nodemaster, node2, node3, psqlhms and hbase containers should be running.
 
-5. Once all work is done, bring down cluster by **./cluster.sh stop**
+5. Enter any container this way: **docker exec -u hadoop -it nodemaster /bin/bash**
+
+6. Once all work is done, bring down cluster by **./cluster.sh stop**
 
 <br />
 

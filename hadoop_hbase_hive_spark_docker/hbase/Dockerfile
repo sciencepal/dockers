@@ -25,6 +25,16 @@ RUN echo "export HBASE_REGIONSERVERS=/home/hadoop/hbase/conf/regionservers" >> $
 RUN echo "export HBASE_MANAGES_ZK=true" >> $HBASE_HOME/conf/hbase-env.sh
 ADD configs/hbase-site.xml $HBASE_HOME/conf/hbase-site.xml
 
+# copy keys
+ADD configs/id_rsa.pub /home/hadoop/.ssh/id_rsa.pub
+ADD configs/id_rsa /home/hadoop/.ssh/id_rsa
+ADD configs/hbase-keyscan.sh /home/hadoop/
+RUN chmod +rx /home/hadoop/hbase-keyscan.sh
+RUN chmod 400 /home/hadoop/.ssh/id_rsa
+RUN chmod 400 /home/hadoop/.ssh/id_rsa.pub
+RUN cat /home/hadoop/.ssh/id_rsa.pub >> /home/hadoop/.ssh/authorized_keys
+RUN chown hadoop -R /home/hadoop/.ssh
+
 
 # ZooKeeper config
 RUN mkdir -p /home/hadoop/zookeeper /home/hadoop/zookeeper/tmp

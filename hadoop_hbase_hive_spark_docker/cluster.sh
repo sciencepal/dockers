@@ -40,6 +40,7 @@ function startServices {
   docker exec -u hadoop -d nodemaster hive --service hiveserver2
   sleep 5
   echo ">> Starting HBASE ..."
+  docker exec -u hadoop -d hbase /home/hadoop/hbase-keyscan.sh
   docker exec -u hadoop -d hbase /home/hadoop/hbase/bin/start-hbase.sh
   # echo ">> Starting Nifi Server ..."
   # docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh start
