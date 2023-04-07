@@ -37,7 +37,7 @@ IF "%1"=="uninstall" (
   call :stopServices
   docker rmi sciencepal/hadoop_cluster:hadoop sciencepal/hadoop_cluster:spark sciencepal/hadoop_cluster:hive sciencepal/hadoop_cluster:postgresql-hms sciencepal/hadoop_cluster:hue sciencepal/hadoop_cluster:edge sciencepal/hadoop_cluster:nifi sciencepal/hadoop_cluster:zeppelin -f
   docker network rm hadoopnet
-  docker system prune -f
+  docker ps -a | grep "sciencepal" | awk '{print $1}' | xargs docker rm
   EXIT /B 0
 )
 
@@ -109,6 +109,7 @@ docker exec -u hadoop -d nodemaster hive --service hiveserver2
 @REM ECHO ">> Starting Zeppelin ..."
 @REM docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh start
 ECHO ">> Starting HBASE ..."
+docker exec -u hadoop -d hbase /home/hadoop/hbase-keyscan.sh
 docker exec -u hadoop -d hbase /home/hadoop/hbase/bin/start-hbase.sh
 TIMEOUT /t 5 /nobreak > nul
 ECHO "Hadoop info @ nodemaster: http://172.20.1.1:8088/cluster"

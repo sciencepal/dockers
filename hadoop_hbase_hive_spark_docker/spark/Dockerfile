@@ -6,7 +6,7 @@ USER root
 
 # installing python for pyspark
 # change python version as per your requirement
-RUN apt-get update && apt-get install -y python python3
+RUN apt-get update && apt-get install -y python3 python3-pip python-is-python3
 
 # get sources
 RUN mkdir /usr/share/scala
@@ -36,6 +36,7 @@ RUN echo "export SPARK_LOG_DIR=/home/hadoop/spark/logs" >> /home/hadoop/spark/co
 RUN mv /home/hadoop/spark/conf/spark-defaults.conf.template /home/hadoop/spark/conf/spark-defaults.conf
 RUN echo "spark.eventLog.dir file:/home/hadoop/spark/logs" >> /home/hadoop/spark/conf/spark-defaults.conf
 RUN echo "spark.history.fs.logDirectory file:/home/hadoop/spark/logs" >> /home/hadoop/spark/conf/spark-defaults.conf
-ADD configs/hbase-site.xml /home/hadoop/hbase/con/hbase-site.xml
+ADD configs/hbase-site.xml /home/hadoop/spark/conf/
+ADD configs/hive-site.xml /home/hadoop/spark/conf/
 ADD configs/workers /home/hadoop/spark/conf/slaves
 RUN chown hadoop -R /home/hadoop/spark

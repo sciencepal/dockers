@@ -1,4 +1,4 @@
-FROM sciencepal/hadoop_cluster:spark
+FROM sciencepal/hadoop_cluster:hive
 
 MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 
@@ -29,6 +29,8 @@ ADD configs/hbase-site.xml $HBASE_HOME/conf/hbase-site.xml
 ADD configs/id_rsa.pub /home/hadoop/.ssh/id_rsa.pub
 ADD configs/id_rsa /home/hadoop/.ssh/id_rsa
 ADD configs/hbase-keyscan.sh /home/hadoop/
+ADD configs/hbase-thrift-start.sh /home/hadoop/
+ADD configs/py-base-test-2.py /home/hadoop/hbase
 RUN chmod +rx /home/hadoop/hbase-keyscan.sh
 RUN chmod 400 /home/hadoop/.ssh/id_rsa
 RUN chmod 400 /home/hadoop/.ssh/id_rsa.pub

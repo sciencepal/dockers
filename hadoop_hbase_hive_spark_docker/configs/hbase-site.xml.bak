@@ -44,9 +44,9 @@
     <value>true</value>
   </property>
   <property>
-    <name>hbase.rootdir</name>
-    <value>hdfs://nodemaster:9000/hbase</value>
-  </property>
+  <name>hbase.rootdir</name>
+  <value>hdfs://nodemaster:9000/hbase</value>
+</property>
   <property>
     <name>hbase.zookeeper.property.clientPort</name>
     <value>2181</value>
@@ -55,12 +55,12 @@
     <name>hbase.zookeeper.property.dataDir</name>
     <value>/home/hadoop/zookeeper</value>
   </property>
-  <property>
+    <property>
     <name>dfs.replication</name>
     <value>1</value>
-  </property>
-  <property>
-    <name>hbase.unsafe.stream.capability.enforce</name>
-    <value>false</value>
+    <property>
+  <name>hbase.unsafe.stream.capability.enforce</name>
+  <value>false</value>
+</property>
   </property>
 </configuration>
