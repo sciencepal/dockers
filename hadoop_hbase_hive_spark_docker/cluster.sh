@@ -42,6 +42,9 @@ function startServices {
   echo ">> Starting HBASE ..."
   docker exec -u hadoop -d hbase /home/hadoop/hbase-keyscan.sh
   docker exec -u hadoop -d hbase /home/hadoop/hbase/bin/start-hbase.sh
+  sleep 5
+  docker exec -u hadoop -d hbase /home/hadoop/hbase/hbase-thrift-start.sh
+  sleep 5
   # echo ">> Starting Nifi Server ..."
   # docker exec -u hadoop -d nifi /home/hadoop/nifi/bin/nifi.sh start
   # echo ">> Starting kafka & Zookeeper ..."

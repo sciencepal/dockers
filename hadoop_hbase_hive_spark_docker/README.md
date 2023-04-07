@@ -4,6 +4,8 @@ Thanks to **Aditya Pal** - I forked his original project/repo (https://github.co
 
 This project in the original repo has 1 master, 2 workers, 1 edge node (with Flume, Sqoop and Kafka !!) , 1 Hue service node, 1 Zeppelin service node and 1 Nifi node.
 
+**PS** : Next steps are to update some components like SPARK to version 3 and also Hive and Hadoop. Also recreate this Hadoop Ecosystem platform using docker compose (https://docs.docker.com/compose/). The way of this current version is composing throgh scripts.
+
 **UPDATE** : To have a lighter platform including HBASE service this repo will deploy only Hadoop, Hbase, Zookeeper, Hive, Hive Metastore (PostGresSQL), Zeppelin and Spark only. It is possible to add the other services back, together with Hbase, modifying the script files for build and cluster.
 
 ## Services
