@@ -1,4 +1,4 @@
-FROM sciencepal/hadoop_cluster:hive
+FROM sciencepal/hadoop_cluster:hbase
 
 MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 
