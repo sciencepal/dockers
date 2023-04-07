@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # generate ssh key
-#echo "Y" | ssh-keygen -t rsa -P "" -f configs/id_rsa
+echo "Y" | ssh-keygen -t rsa -P "" -f configs/id_rsa
 
 # Hadoop build
 docker build -f ./hadoop/Dockerfile . -t sciencepal/hadoop_cluster:hadoop
