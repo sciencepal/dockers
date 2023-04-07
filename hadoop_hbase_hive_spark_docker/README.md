@@ -4,7 +4,7 @@ Thanks to **Aditya Pal** - I forked his original project/repo (https://github.co
 
 This project in the original repo has 1 master, 2 workers, 1 edge node (with Flume, Sqoop and Kafka !!) , 1 Hue service node, 1 Zeppelin service node and 1 Nifi node.
 
-**UPDATE** : To have a lighter platform including HBASE service this repo will deploy only Hadoop, Hbase, Zookeeper, Hive, Hive Metastore (PostGresSQL) and Spark only. It is possible to add the other services back, together with Hbase, modifying the script files for build and cluster.
+**UPDATE** : To have a lighter platform including HBASE service this repo will deploy only Hadoop, Hbase, Zookeeper, Hive, Hive Metastore (PostGresSQL), Zeppelin and Spark only. It is possible to add the other services back, together with Hbase, modifying the script files for build and cluster.
 
 ## Services
 
@@ -12,6 +12,7 @@ This project in the original repo has 1 master, 2 workers, 1 edge node (with Flu
 * [Hive 2.3.4](http://hive.apache.org/) with HiveServer2
 * [Spark 2.4.0](https://spark.apache.org/docs/2.4.0/) in YARN mode (Spark Scala, and PySpark)
 * [Hbase 2.4.15](https://hbase.apache.org/)  in Pseudo Distributed Mode on top of HDFS
+* [Zeppelin 0.8.2](https://zeppelin.apache.org/)  Apache Zeppelin - Notebooks
 
 <br />
 
