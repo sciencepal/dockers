@@ -18,6 +18,8 @@ RUN apt-get update
 
 # OpenJDK installation
 RUN apt-get install -y openjdk-8-jre openjdk-8-jdk openssh-server vim
+# Python3 to be used by Pyspark
+RUN apt-get install -y python3 python3-pip python-is-python3
 
 # add hadoop user
 RUN useradd -m -s /bin/bash hadoop
@@ -49,7 +51,7 @@ ENV HADOOP_CONF_DIR $HADOOP_HOME/etc/hadoop
 ENV HADOOP_MAPRED_HOME $HADOOP_HOME 
 ENV HADOOP_COMMON_HOME $HADOOP_HOME 
 ENV HADOOP_HDFS_HOME $HADOOP_HOME 
-ENV HADOOP_COMMON_LIB_NATIVE_DIR $HADOOP_HOME/lib/native
+ENV HADOOP_COMMON_LIB_NATIVE_DIR $HADOOP_HOME/share/hadoop/common/lib
 ENV YARN_HOME $HADOOP_HOME
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV PATH $HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH

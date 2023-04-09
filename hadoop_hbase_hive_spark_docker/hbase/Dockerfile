@@ -23,7 +23,9 @@ RUN echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> $HBASE_HOME/con
 RUN echo "export HBASE_HOME=/home/hadoop/hbase" >> $HBASE_HOME/conf/hbase-env.sh
 RUN echo "export HBASE_REGIONSERVERS=/home/hadoop/hbase/conf/regionservers" >> $HBASE_HOME/conf/hbase-env.sh
 RUN echo "export HBASE_MANAGES_ZK=true" >> $HBASE_HOME/conf/hbase-env.sh
+RUN echo "export HBASE_DISABLE_HADOOP_CLASSPATH_LOOKUP=true" >> $HBASE_HOME/conf/hbase-env.sh
 ADD configs/hbase-site.xml $HBASE_HOME/conf/hbase-site.xml
+ADD configs/hbase-thrift-start.sh $HBASE_HOME/hbase-thrift-start.sh
 
 # copy keys
 ADD configs/id_rsa.pub /home/hadoop/.ssh/id_rsa.pub

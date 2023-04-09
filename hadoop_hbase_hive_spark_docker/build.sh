@@ -1,7 +1,14 @@
 #!/bin/bash
 
 # generate ssh key
-echo "Y" | ssh-keygen -t rsa -P "" -f configs/id_rsa
+echo "Enter your filename"
+KEYFILE=configs/id_rsa
+if [ -f "$KEYFILE" ]
+then
+    echo "Key is already available"
+else
+   echo "Y" | ssh-keygen -t rsa -P "" -f configs/id_rsa
+fi
 
 # Hadoop build
 docker build -f ./hadoop/Dockerfile . -t sciencepal/hadoop_cluster:hadoop
@@ -19,7 +26,7 @@ docker build -f ./hive/Dockerfile . -t sciencepal/hadoop_cluster:hive
 docker build -f ./hbase/Dockerfile . -t sciencepal/hadoop_cluster:hbase
 
 # zeppelin
-docker build -f ./zeppelin/Dockerfile . -t sciencepal/hadoop_cluster:zeppelin
+#docker build -f ./zeppelin/Dockerfile . -t sciencepal/hadoop_cluster:zeppelin
 
 # BELOW TOOLS WILL BE DELETED
 # Nifi

@@ -20,16 +20,18 @@ RUN tar -xzf /home/hadoop/spark-2.4.0-bin-without-hadoop.tgz -C /home/hadoop/
 RUN mv /home/hadoop/spark-2.4.0-bin-without-hadoop /home/hadoop/spark
 RUN rm /home/hadoop/spark-2.4.0-bin-without-hadoop.tgz
 
-RUN mkdir /home/hadoop/spark/logs
+RUN mkdir -p /home/hadoop/spark/logs
 RUN chown hadoop -R /home/hadoop/spark/logs
 
 # set environment variables
 ENV SCALA_HOME /usr/share/scala
 ENV SPARK_HOME /home/hadoop/spark
 ENV SPARK_LOG_DIR /home/hadoop/spark/logs
+ENV HADOOP_HOME /home/hadoop/hadoop
 # ENV SPARK_DIST_CLASSPATH $(hadoop classpath) does not work
 RUN export SPARK_DIST_CLASSPATH=$(hadoop classpath)
 ENV PATH $SPARK_HOME/bin:$SPARK_HOME/sbin:$PATH
+ENV LD_LIBRARY_PATH /home/hadoop/hadoop/share/hadoop/common/lib:$LD_LIBRARY_PATH
 RUN mv /home/hadoop/spark/conf/spark-env.sh.template /home/hadoop/spark/conf/spark-env.sh
 RUN echo "export SPARK_DIST_CLASSPATH=$(hadoop classpath)" >> /home/hadoop/spark/conf/spark-env.sh
 RUN echo "export SPARK_LOG_DIR=/home/hadoop/spark/logs" >> /home/hadoop/spark/conf/spark-env.sh

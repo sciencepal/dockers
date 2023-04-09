@@ -1,4 +1,4 @@
-FROM postgres
+FROM postgres:13-alpine
 
 MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 
