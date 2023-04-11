@@ -71,6 +71,7 @@ ADD configs/core-site.xml $HADOOP_HOME/etc/hadoop/core-site.xml
 ADD configs/hdfs-site.xml $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 ADD configs/mapred-site.xml $HADOOP_HOME/etc/hadoop/mapred-site.xml
 ADD configs/yarn-site.xml $HADOOP_HOME/etc/hadoop/yarn-site.xml
+ADD configs/hive-site.xml $HADOOP_HOME/etc/hadoop/hive-site.xml
 ADD configs/workers $HADOOP_HOME/etc/hadoop/workers
 
 # permissions
