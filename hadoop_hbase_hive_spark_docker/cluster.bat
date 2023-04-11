@@ -43,7 +43,7 @@ IF "%1"=="uninstall" (
 
 
 IF "%1"=="start" (
-  docker start psqlhms nodemaster node2 node3 edge hue nifi zeppelin
+  docker start psqlhms nodemaster node2 node3 edge hue nifi
   call :startServices
   EXIT /B 0
 )

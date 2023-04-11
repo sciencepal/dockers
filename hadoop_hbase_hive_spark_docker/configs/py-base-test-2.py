@@ -2,7 +2,7 @@ import happybase
 import random
 
 # Connect to HBase
-connection = happybase.Connection('localhost', port=9090)
+connection = happybase.Connection('hbase', port=9090)
 
 # Create a table
 table_name = 'test_table_01'

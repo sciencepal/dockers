@@ -15,7 +15,7 @@ docker push sciencepal/hadoop_cluster:postgresql-hms
 docker push sciencepal/hadoop_cluster:hive
 
 # Nifi
-docker push sciencepal/hadoop_cluster:nifi
+# docker push sciencepal/hadoop_cluster:nifi
 
 # Edge
 docker push sciencepal/hadoop_cluster:edge
@@ -23,5 +23,3 @@ docker push sciencepal/hadoop_cluster:edge
 # hue
 docker push sciencepal/hadoop_cluster:hue
 
-# zeppelin
-docker push sciencepal/hadoop_cluster:zeppelin

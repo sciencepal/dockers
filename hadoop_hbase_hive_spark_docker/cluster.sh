@@ -50,9 +50,7 @@ function startServices {
   # echo ">> Starting kafka & Zookeeper ..."
   # docker exec -u hadoop -d edge /home/hadoop/kafka/bin/zookeeper-server-start.sh -daemon  /home/hadoop/kafka/config/zookeeper.properties
   # docker exec -u hadoop -d edge /home/hadoop/kafka/bin/kafka-server-start.sh -daemon  /home/hadoop/kafka/config/server.properties
-  echo ">> Starting Zeppelin ..."
-  docker exec -u hadoop -d zeppelin /home/hadoop/zeppelin/bin/zeppelin-daemon.sh start
-  sleep 5
+  
   echo "Hadoop info @ nodemaster: http://172.20.1.1:8088/cluster"
   echo "DFS Health @ nodemaster : http://172.20.1.1:50070/dfshealth"
   echo "MR-JobHistory Server @ nodemaster : http://172.20.1.1:19888"
@@ -61,7 +59,6 @@ function startServices {
   echo "Zookeeper @ hbase : http://172.20.1.9:2181"
   # echo "Kafka @ edge : http://172.20.1.5:9092"
   # echo "Nifi @ edge : http://172.20.1.5:8080/nifi & from host @ http://localhost:8080/nifi"
-  # echo "Zeppelin @ zeppelin : http://172.20.1.6:8081 & from host @ http://localhost:8081" 
   echo "HBASE @ hbase : http://172.20.1.9:16010 & from host @ http://localhost:16010"
 }
 
@@ -88,10 +85,10 @@ if [[ $1 = "install" ]]; then
   
   # 3 nodes
   echo ">> Starting master and worker nodes ..."
-  docker run -d --net hadoopnet --ip 172.20.1.1 -p 8088:8088 -p 50070:50070 -p 8080:8080 -p 18080:18080 --hostname nodemaster --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host hbase:172.20.1.9 --name nodemaster -it sciencepal/hadoop_cluster:hive
+  docker run -d --net hadoopnet --ip 172.20.1.1 -p 4040:4040 -p 8088:8088 -p 50070:50070 -p 8080:8080 -p 18080:18080 --hostname nodemaster --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host hbase:172.20.1.9 --name nodemaster -it sciencepal/hadoop_cluster:hive
   docker run -d --net hadoopnet --ip 172.20.1.2 --hostname node2 --add-host nodemaster:172.20.1.1 --add-host node3:172.20.1.3 --add-host hbase:172.20.1.9 --name node2 -it sciencepal/hadoop_cluster:spark
   docker run -d --net hadoopnet --ip 172.20.1.3 --hostname node3 --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host hbase:172.20.1.9 --name node3 -it sciencepal/hadoop_cluster:spark
-  docker run -d --net hadoopnet --ip 172.20.1.5 --hostname edge --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --add-host hbase:172.20.1.9 --name edge -it sciencepal/hadoop_cluster:edge 
+  docker run -d --net hadoopnet --ip 172.20.1.5 -p 4040:4040 --hostname edge --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --add-host hbase:172.20.1.9 --name edge -it sciencepal/hadoop_cluster:edge 
   docker run -d --net hadoopnet --ip 172.20.1.9 -p 16010:16010 --hostname hbase --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --add-host hbase:172.20.1.9 --name hbase -it sciencepal/hadoop_cluster:hbase 
   #docker run -d --net hadoopnet --ip 172.20.1.6 -p 8080:8080 --hostname nifi --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --name nifi -it sciencepal/hadoop_cluster:nifi 
   #docker run -d --net hadoopnet --ip 172.20.1.7  -p 8888:8888 --hostname huenode --add-host edge:172.20.1.5 --add-host nodemaster:172.20.1.1 --add-host node2:172.20.1.2 --add-host node3:172.20.1.3 --add-host psqlhms:172.20.1.4 --name hue -it sciencepal/hadoop_cluster:hue
