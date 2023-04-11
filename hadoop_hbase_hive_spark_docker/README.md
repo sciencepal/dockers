@@ -12,9 +12,8 @@ This project in the original repo has 1 master, 2 workers, 1 edge node (with Flu
 
 * [Hadoop 3.2.0](http://hadoop.apache.org/docs/r3.2.0/) HDFS in  Distributed (Multi-node) Mode
 * [Hive 2.3.4](http://hive.apache.org/) with HiveServer2
-* [Spark 2.4.0](https://spark.apache.org/docs/2.4.0/) in YARN mode (Spark Scala, and PySpark)
+* [Spark 2.4.5](https://spark.apache.org/docs/2.4.5/) in YARN mode (Spark Scala, and PySpark)
 * [Hbase 2.4.15](https://hbase.apache.org/)  in Pseudo Distributed Mode on top of HDFS
-* [Zeppelin 0.8.2](https://zeppelin.apache.org/)  Apache Zeppelin - Notebooks
 
 <br />
 
