@@ -1,12 +1,11 @@
 FROM sciencepal/hadoop_cluster:hadoop
 
-MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
 
 USER root
 
 # installing python for pyspark
 # change python version as per your requirement
-RUN apt-get update && apt-get install -y python3 python3-pip python-is-python3
+#RUN apt-get update && apt-get install -y python3 python3-pip python-is-python3
 
 ENV SCALA_VERSION 2.12.12
 ENV SPARK_VERSION 2.4.5
