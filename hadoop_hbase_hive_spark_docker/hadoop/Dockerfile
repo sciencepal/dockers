@@ -1,6 +1,4 @@
-FROM ubuntu
-
-MAINTAINER Aditya Pal <aditya.pal.science@gmail.com>
+FROM ubuntu:20.04
 
 USER root
 
@@ -19,8 +17,8 @@ RUN apt-get update
 # OpenJDK installation
 RUN apt-get install -y openjdk-8-jre openjdk-8-jdk openssh-server vim
 # Python3 to be used by Pyspark
-RUN apt-get install -y python3 python3-pip python-is-python3
-
+# RUN apt-get install -y python3 python3-pip python-is-python3
+ENV HADDOP_VERSION 3.3.1
 # add hadoop user
 RUN useradd -m -s /bin/bash hadoop
 
@@ -39,10 +37,11 @@ RUN cat /home/hadoop/.ssh/id_rsa.pub >> /home/hadoop/.ssh/authorized_keys
 RUN chown hadoop -R /home/hadoop/.ssh
 
 # get sources
-RUN wget https://archive.apache.org/dist/hadoop/core/hadoop-3.2.0/hadoop-3.2.0.tar.gz -P /home/hadoop/
-RUN tar -xzf /home/hadoop/hadoop-3.2.0.tar.gz -C /home/hadoop/
-RUN mv /home/hadoop/hadoop-3.2.0 /home/hadoop/hadoop
-RUN rm -rf /home/hadoop/hadoop-3.2.0*
+ENV HADOOP_VERSION 3.3.1
+RUN wget https://archive.apache.org/dist/hadoop/core/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz -P /home/hadoop/
+RUN tar -xzf /home/hadoop/hadoop-$HADOOP_VERSION.tar.gz -C /home/hadoop/
+RUN mv /home/hadoop/hadoop-$HADOOP_VERSION /home/hadoop/hadoop
+RUN rm -rf /home/hadoop/hadoop-$HADOOP_VERSION*
 
 # set environment variables
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64

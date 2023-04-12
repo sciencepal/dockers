@@ -1,0 +1,96 @@
+FROM debian:buster
+ 
+# https://github.com/hadolint/hadolint/wiki/DL4006
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ 
+# make sure needed packages are installed on the main system
+# https://linuxize.com/post/install-java-on-debian-10/
+RUN apt-get update \
+                && apt-get install -y \
+                                apt-transport-https \
+                                ca-certificates \
+                                wget \
+                                dirmngr \
+                                gnupg \
+                                software-properties-common \
+                                openssh-server \
+                                sudo \
+                                curl \
+                                vim \
+                && wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add - \
+                && add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ \
+                && apt-get update \
+                && apt-get install -y adoptopenjdk-8-hotspot
+ 
+# install scala and sbt
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list \
+                && echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list \
+                && curl -sL https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823 | apt-key add \
+                && apt-get update \
+                && apt-get install -y sbt scala
+ 
+RUN useradd -ms /bin/bash hadoop \
+                && echo "hadoop:hadoop" | chpasswd \
+                && adduser hadoop sudo \
+                # INSECURE (!!)
+                # https://dev.to/emmanuelnk/using-sudo-without-password-prompt-as-non-root-docker-user-52bg
+                && echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+ 
+USER hadoop
+WORKDIR /home/hadoop
+ 
+# set up passwordless ssh
+RUN ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa \
+                && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+ 
+# hadoop installation
+RUN wget https://dlcdn.apache.org/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz \
+                && tar -xzf hadoop-3.3.1.tar.gz \
+                && rm hadoop-3.3.1.tar.gz \
+                && mkdir -p hdfs/{namenode,datanode} \
+                && echo -e "\nexport JAVA_HOME=\"$(dirname $(dirname $(readlink -f $(which javac))))\"" >> hadoop-3.3.1/etc/hadoop/hadoop-env.sh
+ 
+COPY tasks/TaskOneBasicHDFS/config/* hadoop-3.3.1/etc/hadoop/
+ 
+# spark installation
+RUN wget https://dlcdn.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz \
+                && tar -xzf spark-3.1.2-bin-hadoop3.2.tgz \
+                && rm spark-3.1.2-bin-hadoop3.2.tgz \
+                && cp spark-3.1.2-bin-hadoop3.2/conf/spark-env.sh.template spark-3.1.2-bin-hadoop3.2/conf/spark-env.sh \
+                && echo -e "\nexport HADOOP_CONF_DIR=\$HADOOP_HOME/etc/hadoop" >> spark-3.1.2-bin-hadoop3.2/conf/spark-env.sh \
+                && echo "export YARN_CONF_DIR=\$HADOOP_HOME/etc/hadoop" >> spark-3.1.2-bin-hadoop3.2/conf/spark-env.sh \
+                && echo "export PYSPARK_PYTHON=python3" >> spark-3.1.2-bin-hadoop3.2/conf/spark-env.sh \
+                && cp spark-3.1.2-bin-hadoop3.2/conf/workers.template spark-3.1.2-bin-hadoop3.2/conf/workers
+ 
+# hive installation
+RUN wget https://dlcdn.apache.org/hive/hive-2.3.9/apache-hive-2.3.9-bin.tar.gz \
+                && tar -xzf apache-hive-2.3.9-bin.tar.gz \
+                && rm apache-hive-2.3.9-bin.tar.gz \
+                && cp apache-hive-2.3.9-bin/conf/hive-env.sh.template apache-hive-2.3.9-bin/conf/hive-env.sh \
+                && echo -e "\nexport HADOOP_HOME=$HADOOP_HOME" >> apache-hive-2.3.9-bin/conf/hive-env.sh
+ 
+# set up environment
+RUN echo -e "\nexport JAVA_HOME=\"$(dirname $(dirname $(readlink -f $(which javac))))\"" >> ~/.bashrc \
+                && echo -e "\nexport HADOOP_HOME=\"$HOME/hadoop-3.3.1\"" >> ~/.bashrc \
+                && echo "export SPARK_HOME=\"$HOME/spark-3.1.2-bin-hadoop3.2\"" >> ~/.bashrc \
+                && echo "export HIVE_HOME=\"$HOME/apache-hive-2.3.9-bin\"" >> ~/.bashrc
+ 
+RUN echo -e "\nexport PATH=\$PATH:\$HADOOP_HOME/bin:\$SPARK_HOME/bin:\$HIVE_HOME/bin" >> ~/.bashrc
+ 
+# data and source code for the Spark app
+COPY data-spark/* datasets/
+COPY tasks/TaskOneBasicHDFS/app /home/hadoop/app
+ 
+# package the source so it can be submitted to spark
+RUN cd app && sudo sbt package
+ 
+COPY tasks/TaskOneBasicHDFS/entrypoint.sh /
+RUN sudo chmod +x /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
+ 
+# expose ports for hdfs and yarn web interfaces
+EXPOSE 8088 9870
+ 
+# docker build -t jvanderwolf/task-one-basic-hdfs -f Dockerfile.TaskOne .
+# docker run --rm -p 8088:8088 -p 9870:9870 --name task-one -it jvanderwolf/task-one-basic-hdfs
+ 

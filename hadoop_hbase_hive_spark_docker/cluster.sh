@@ -13,6 +13,13 @@ function startServices {
   echo ">> Starting MR-JobHistory Server ..."
   docker exec -u hadoop -d nodemaster mr-jobhistory-daemon.sh start historyserver
   sleep 5
+    echo ">> Preparing hdfs for SPARK ..."
+  docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /spark-jars
+  docker exec -u hadoop -it nodemaster hdfs dfs -mkdir -p /log/spark
+  docker exec -u hadoop -it nodemaster hdfs dfs -chmod g+w /spark-jars
+  docker exec -u hadoop -it nodemaster hdfs dfs -chmod g+w /log/spark
+  docker exec -u hadoop -it nodemaster hdfs dfs -copyFromLocal "/home/hadoop/spark/jars" "/spark-jars "
+  sleep 5
   echo ">> Starting Spark ..."
   docker exec -u hadoop -d nodemaster start-master.sh
   docker exec -u hadoop -d node2 start-slave.sh nodemaster:7077

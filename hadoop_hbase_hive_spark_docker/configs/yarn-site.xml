@@ -28,16 +28,16 @@
 	</property>
     <property>
             <name>yarn.nodemanager.resource.memory-mb</name>
-            <value>1024</value>
-    </property>
-    <property>
-            <name>yarn.scheduler.maximum-allocation-mb</name>
-            <value>1024</value>
+            <value>4096</value>
     </property>
     <property>
             <name>yarn.scheduler.minimum-allocation-mb</name>
             <value>128</value>
     </property>
+        <property>
+		<name>yarn.scheduler.minimum-allocation-vcores</name>
+		<value>1</value>
+	</property>
     <property>
 		<name>yarn.nodemanager.resource.cpu-vcores</name>
 		<value>2</value>
@@ -53,5 +53,13 @@
     <property>
             <name>yarn.nodemanager.pmem-check-enabled</name>
             <value>false</value>
+    </property>
+        <!-- Required for Hive on Spark
+    https://cwiki.apache.org/confluence/display/Hive/Hive+on+Spark%3A+Getting+Started -->
+    <property>
+        <name>yarn.resourcemanager.scheduler.class</name>
+        <!-- Note: do not reformat, any new lines between <value></value>
+        tags will cause NoClassDefFound for FairScheduler-->
+        <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
     </property>
 </configuration>
