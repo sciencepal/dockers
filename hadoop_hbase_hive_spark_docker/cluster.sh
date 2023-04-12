@@ -112,12 +112,12 @@ if [[ $1 = "uninstall" ]]; then
   stopServices
   docker network rm hadoopnet
   docker ps -a | grep "sciencepal" | awk '{print $1}' | xargs docker rm
-  docker rmi sciencepal/hadoop_cluster:hadoop sciencepal/hadoop_cluster:spark sciencepal/hadoop_cluster:hive sciencepal/hadoop_cluster:postgresql-hms sciencepal/hadoop_cluster:hue sciencepal/hadoop_cluster:edge sciencepal/hadoop_cluster:nifi sciencepal/hadoop_cluster:zeppelin sciencepal/hadoop_cluster:hbase -f
+  docker rmi sciencepal/hadoop_cluster:hadoop sciencepal/hadoop_cluster:spark sciencepal/hadoop_cluster:hive sciencepal/hadoop_cluster:postgresql-hms sciencepal/hadoop_cluster:hue sciencepal/hadoop_cluster:edge sciencepal/hadoop_cluster:nifi sciencepal/hadoop_cluster:hbase -f
   exit
 fi
 
 if [[ $1 = "start" ]]; then  
-  docker start psqlhms nodemaster node2 node3 hbase edge zeppelin
+  docker start psqlhms nodemaster node2 node3 hbase edge
 # docker start psqlhms nodemaster node2 node3 edge hue nifi zeppelin
   startServices
   exit
